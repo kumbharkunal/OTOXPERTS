@@ -1,0 +1,61 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# local brand references and image originals (never committed)
+_brand-ref/
+_incoming-images/
+
+# local Claude Code and agent tooling
+.mcp.json
+.claude/settings.local.json
+.claude/skills/
+.agents/
+.impeccable/
+skills-lock.json
+
+# QA tool output
+.lighthouse/
+.taste-skill/
+.jury/
+.shots/

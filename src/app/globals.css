@@ -311,6 +311,23 @@ html.lenis, html.lenis body { height: auto; }
   to { opacity: 1; translate: 0 0; }
 }
 
+/* Reel player: settles in from 97%; reduced motion keeps only the fade. */
+.reel-dialog[open] {
+  animation: ox-reel-in 240ms var(--ease-ui);
+}
+.reel-dialog[open]::backdrop {
+  animation: ox-fade-in 240ms var(--ease-ui);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reel-dialog[open] { animation-name: ox-fade-in; }
+}
+@keyframes ox-reel-in {
+  from { opacity: 0; scale: 0.97; }
+}
+@keyframes ox-fade-in {
+  from { opacity: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     scroll-behavior: auto !important;

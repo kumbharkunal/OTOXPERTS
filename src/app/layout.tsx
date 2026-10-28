@@ -9,6 +9,7 @@ import { Logo } from "@/components/brand/Logo";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { HapticsProvider } from "@/components/motion/HapticsProvider";
 import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
+import { ReelHost } from "@/components/reels/ReelHost";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://otoxperts.vercel.app";
 // The demo stays out of search results until OtoXperts adopts it (docs/PLAN.md, U1).
@@ -70,6 +71,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Navbar logo={<Logo id="nav-logo" drawable className="w-21.5 lg:w-24.5" title="OtoXperts" />} />
         {children}
         <WhatsAppFloat />
+        <ReelHost />
         <Analytics />
         <SpeedInsights />
       </body>

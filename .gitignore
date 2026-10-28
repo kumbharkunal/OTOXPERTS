@@ -45,6 +45,7 @@ next-env.d.ts
 # local brand references and image originals (never committed)
 _brand-ref/
 _incoming-images/
+_incoming-videos/
 
 # local Claude Code and agent tooling
 .mcp.json

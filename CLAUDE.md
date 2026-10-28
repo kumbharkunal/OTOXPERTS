@@ -26,6 +26,7 @@ The approved plan is `docs/PLAN.md` (research, sources, tokens, section specs, T
 - Haptics come from the global `HapticsProvider`; opt out per element with `data-haptic="off"`, override with `data-haptic="select|success|warn"`.
 - Accessibility: WCAG 2.2 AA, 44px targets, visible focus rings, everything usable without JS.
 - Images: numbered PNGs go in `_incoming-images/`, then `npm run images`. Code never references `_incoming-images/`.
+- Reels play on the site: `_incoming-videos/<reel code>.mp4`, then `npm run videos`; link them with `ReelLink`. Never link a video out to Instagram (Kunal's call, for now).
 - TypeScript stays on 5.9.x and ESLint on 9.x (TS 7 and ESLint 10 break eslint-config-next).
 
 ## Commands

@@ -2,6 +2,7 @@
 # local brand references, image originals, agent tooling, QA output and env files.
 _brand-ref/
 _incoming-images/
+_incoming-videos/
 .claude/
 .agents/
 .mcp.json

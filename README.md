@@ -45,6 +45,13 @@ The page ships with designed placeholders at the exact aspect ratio of each phot
    - Paste them into `hero.callouts[].pos` in `site.ts`.
    - Do this at a desktop width, and again below 768px for the phone crop.
 
+## Adding the reels
+
+Reels play in an on-site player. Nothing on the page links out to Instagram to watch a video, and a reel without a file shows as plain text until it's added.
+
+1. Save each reel as `_incoming-videos/<reel code>.mp4`. The code is the part of the Instagram address after `/reel/`, e.g. `DdG0NxypRuM`. The codes the page uses are the `video: "..."` entries in `src/content/site.ts`.
+2. Run `npm run videos`. It needs ffmpeg, on your PATH or set as `FFMPEG_PATH`. It writes `public/videos/<code>.mp4` (H.264 at up to 540×960, set to start playing before it finishes downloading) and a poster, updates `src/content/videos.generated.json`, and lists any reels still missing.
+
 ## Scripts
 
 | Command | What it does |
@@ -53,6 +60,7 @@ The page ships with designed placeholders at the exact aspect ratio of each phot
 | `npm run build` / `npm start` | Production build and server |
 | `npm run lint` / `npm run typecheck` | ESLint and TypeScript checks |
 | `npm run images` | Process photos from `_incoming-images/` |
+| `npm run videos` | Process reels from `_incoming-videos/` (needs ffmpeg) |
 | `npm run todos` | List what's waiting on the client |
 | `npm run budget [url]` | Initial JS (gzip) against the 170 KB budget; run against a production server |
 | `npm run test:e2e` | Playwright tests: Chromium, WebKit and phone profiles, including axe accessibility checks |

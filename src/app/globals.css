@@ -1,0 +1,296 @@
+@import "tailwindcss";
+
+/* `.js` is set by an inline script before first paint; enhancements hang off it. */
+@custom-variant js (&:where(.js, .js *));
+
+@theme {
+  /* Base palette (docs/PLAN.md §6.1) */
+  --color-carbon: #000000;
+  --color-paper: #ffffff;
+  --color-concrete: #eef0f2;
+  --color-graphite: #3a3d42;
+  --color-signal: #ed0c0c;
+  --color-signal-ink: #c40a0a;
+
+  /* Supporting */
+  --color-muted: #5c6168;
+  --color-muted-dark: #a1a6ad;
+  --color-rule: #cdd1d6;
+  --color-rule-dark: rgb(255 255 255 / 0.14);
+
+  /* Status, report UI only, always with a glyph and the word */
+  --color-pass: #0f7a3d;
+  --color-attn: #a35400;
+  --color-fail: #c40a0a;
+
+  /* Motion */
+  --ease-ui: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-hero: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-inout: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Radius hierarchy: pill (rounded-full), sheets and photos, inputs, data cells (none) */
+  --radius-md: 14px;
+  --radius-sm: 8px;
+}
+
+@theme inline {
+  --font-display: var(--font-hubot), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-mona), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ------------------------------------------------------------------ base */
+
+@layer base {
+  :root {
+    --gutter: 16px;
+    --nav-offset: 88px;
+    --section-y: clamp(6rem, 4rem + 8vw, 12.5rem);
+    --scroll-track: var(--color-carbon);
+    --ring: #000;
+  }
+  @media (min-width: 768px) {
+    :root { --gutter: 24px; }
+  }
+  @media (min-width: 1024px) {
+    :root { --gutter: 40px; --nav-offset: 96px; }
+  }
+
+  html {
+    background: var(--color-carbon);
+    color: var(--color-graphite);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    /* Custom scrollbar: red thumb, track follows the section under the nav (data-under). */
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-signal) var(--scroll-track);
+    scrollbar-gutter: stable;
+  }
+  html[data-under="light"] { --scroll-track: var(--color-concrete); }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    background: var(--color-paper);
+    overflow-x: clip;
+  }
+
+  [data-theme="dark"] { --ring: #fff; color-scheme: dark; }
+  [data-theme="light"] { --ring: #000; color-scheme: light; }
+
+  ::selection { background: var(--color-signal); color: #fff; }
+  input, textarea, select { caret-color: var(--color-signal); }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  a { text-underline-offset: 0.22em; text-decoration-thickness: 1px; }
+  h1, h2, h3 { text-wrap: balance; }
+  p, li, dd { text-wrap: pretty; }
+
+  img, svg, video { display: block; max-width: 100%; }
+
+  @media (forced-colors: active) {
+    html { scrollbar-color: auto; }
+  }
+}
+
+/* Safari: no scrollbar-color, so theme the WebKit scrollbar instead. */
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--scroll-track); }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-signal);
+    border-radius: 999px;
+    border: 2px solid var(--scroll-track);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-signal-ink); }
+}
+
+/* Lenis (lenis/dist/lenis.css) */
+html.lenis, html.lenis body { height: auto; }
+.lenis:not(.lenis-autoToggle).lenis-stopped { overflow: clip; }
+.lenis [data-lenis-prevent], .lenis [data-lenis-prevent-wheel], .lenis [data-lenis-prevent-touch] { overscroll-behavior: contain; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
+
+/* ------------------------------------------------------------- utilities */
+
+@utility container-x {
+  width: 100%;
+  max-width: calc(1320px + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+@utility section-y {
+  padding-block: var(--section-y);
+}
+
+@utility display-1 {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 800;
+  font-stretch: 100%;
+  font-size: clamp(3rem, 1.9rem + 4.4vw, 6rem);
+  line-height: 0.92;
+  letter-spacing: -0.025em;
+  @media (min-width: 400px) { font-stretch: 112%; }
+}
+
+@utility display-2 {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 760;
+  font-stretch: 108%;
+  font-size: clamp(2.25rem, 1.5rem + 3vw, 4.25rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+}
+
+@utility display-3 {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-stretch: 106%;
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+@utility title {
+  font-size: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
+  line-height: 1.25;
+  font-weight: 620;
+  letter-spacing: -0.005em;
+}
+
+@utility body-l {
+  font-size: clamp(1.125rem, 1.07rem + 0.25vw, 1.25rem);
+  line-height: 1.55;
+}
+
+@utility reading {
+  font-variant-numeric: tabular-nums slashed-zero;
+  font-weight: 560;
+}
+
+@utility measure {
+  max-width: 68ch;
+}
+
+/* Visually hidden but available to assistive tech. */
+@utility sr-only-focusable {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  &:focus, &:focus-visible {
+    position: fixed;
+    width: auto;
+    height: auto;
+    margin: 0;
+    clip-path: none;
+    overflow: visible;
+  }
+}
+
+/* ------------------------------------------------------------ components */
+
+@layer components {
+  /* Glass, nav only (docs/PLAN.md §6.4). Two stacked layers so the theme
+     switch is an opacity cross-fade; blur radius is never animated. */
+  .glass {
+    position: relative;
+    isolation: isolate;
+  }
+  .glass::before,
+  .glass::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    z-index: -1;
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    backdrop-filter: blur(18px) saturate(160%);
+    transition: opacity 240ms var(--ease-ui);
+    pointer-events: none;
+  }
+  .glass::before {
+    background: rgb(0 0 0 / 0.52);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12), inset 0 0 0 1px rgb(255 255 255 / 0.14);
+  }
+  .glass::after {
+    background: rgb(255 255 255 / 0.66);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.75), inset 0 0 0 1px rgb(0 0 0 / 0.08);
+    opacity: 0;
+  }
+  [data-nav-theme="light"] .glass::before { opacity: 0; }
+  [data-nav-theme="light"] .glass::after { opacity: 1; }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass::before { background: rgb(0 0 0 / 0.92); }
+    .glass::after { background: rgb(255 255 255 / 0.96); }
+  }
+
+  /* Logo car line draws left to right once JS is running (the mask rect slides in).
+     Without JS or with reduced motion it simply shows. Failsafe at 4 s. */
+  @media (prefers-reduced-motion: no-preference) {
+    .js .logo-wipe {
+      transform: translateX(-1100px);
+      transition: transform 900ms var(--ease-hero);
+      animation: ox-logo-failsafe 0s 4s forwards;
+    }
+    .js [data-drawn] .logo-wipe {
+      transform: none;
+    }
+  }
+
+  /* Checkpoint explorer: on desktop with motion, a sticky stage inside a tall track;
+     scroll progress picks the category (reveals/explorer). Present from first paint. */
+  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+    .js [data-explorer-track] { height: 580vh; }
+    .js [data-explorer-stage] { position: sticky; top: 0; height: 100svh; }
+  }
+
+  /* Press feedback for anything you can press. */
+  .pressable {
+    transition: transform 120ms var(--ease-ui);
+  }
+  .pressable:active {
+    transform: scale(0.97);
+  }
+
+}
+
+@keyframes ox-logo-failsafe {
+  to { transform: none; }
+}
+
+/* Live hubs on the map: one slow ring, compositor-only. */
+@keyframes ox-ping {
+  0% { scale: 1; opacity: 0.7; }
+  70%, 100% { scale: 2.2; opacity: 0; }
+}
+
+/* FAQ answers fade in; height is never animated. */
+@keyframes ox-faq-in {
+  from { opacity: 0; translate: 0 4px; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+  }
+}

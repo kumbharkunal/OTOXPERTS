@@ -1,0 +1,261 @@
+/*
+ * Hero: the inspection light (docs/PLAN.md §7).
+ * Layers: base photo · dim overlay · beam (same photo, masked, moved by transforms) ·
+ * scrim · callouts (same cover-box geometry) · copy.
+ * Torch mode exists only while the controller sets data-torch="on"; without it the
+ * frame is fully lit with every callout visible (no JS, reduced motion, failures).
+ */
+
+.hero-curtain {
+  position: relative;
+  isolation: isolate;
+}
+
+.hero-stage {
+  --beam: 300px;
+  --ar: 0.5625; /* 9:16 phone crop */
+  position: relative;
+  z-index: 0;
+  height: 100svh;
+  min-height: 600px;
+  overflow: hidden;
+  background: #000;
+  color: #fff;
+}
+@media (min-width: 768px) {
+  .hero-stage { --ar: 1.7778; } /* 16:9 */
+}
+@media (min-width: 1024px) {
+  .hero-stage { --beam: 460px; min-height: 640px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-stage { position: sticky; top: 0; }
+}
+
+/* Extra scroll on touch while the light travels across the car (JS + motion only). */
+.hero-scrubSpace { display: none; }
+@media (prefers-reduced-motion: no-preference) and ((pointer: coarse) or (max-width: 1023px)) {
+  .js .hero-scrubSpace { display: block; height: 55svh; }
+}
+
+/* ---------------------------------------------------------------- media */
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+}
+
+.hero-cover {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100cqw, 100cqh * var(--ar));
+  aspect-ratio: var(--ar);
+  translate: -50% -50%;
+}
+.hero-cover > picture > img,
+.hero-cover > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-dim {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  transition: opacity 700ms var(--ease-hero);
+}
+.hero-stage[data-torch="on"] .hero-dim { opacity: 0.76; }
+
+.hero-beam {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--beam);
+  height: var(--beam);
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform;
+  -webkit-mask-image: radial-gradient(closest-side, #000 48%, rgb(0 0 0 / 0.6) 70%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 48%, rgb(0 0 0 / 0.6) 70%, transparent 100%);
+}
+.hero-stage[data-torch="on"] .hero-beam { visibility: visible; }
+
+/* A faint warm hotspot, like a real torch beam. Static inside the beam. */
+.hero-beam::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(closest-side, rgb(255 248 236 / 0.12), transparent 75%);
+}
+
+.hero-beamInner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--stage-w, 100vw);
+  height: var(--stage-h, 100svh);
+  will-change: transform;
+}
+
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgb(0 0 0 / 0.82) 0%, rgb(0 0 0 / 0.6) 40%, rgb(0 0 0 / 0) 64%);
+}
+@media (min-width: 1024px) {
+  .hero-scrim { background: linear-gradient(90deg, rgb(0 0 0 / 0.84) 0%, rgb(0 0 0 / 0.55) 34%, rgb(0 0 0 / 0) 58%); }
+}
+
+/* -------------------------------------------------------------- callouts */
+
+.hero-calloutLayer {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+  pointer-events: none;
+}
+
+.hero-callouts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hero-callout {
+  position: absolute;
+  left: var(--x-m);
+  top: var(--y-m);
+}
+@media (min-width: 768px) {
+  .hero-callout { left: var(--x-d); top: var(--y-d); }
+}
+.hero-callout[data-desktop-only] { display: none; }
+@media (min-width: 1024px) {
+  .hero-callout[data-desktop-only] { display: block; }
+}
+
+.hero-hotspot {
+  position: absolute;
+  left: -22px;
+  top: -22px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.hero-hotspot::before {
+  content: "";
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1.5px solid rgb(255 255 255 / 0.92);
+  transition: scale 240ms var(--ease-ui), border-color 240ms var(--ease-ui);
+}
+.hero-hotspot::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-signal);
+}
+.hero-callout[data-lit] .hero-hotspot::before { scale: 1.25; border-color: var(--color-signal); }
+
+.hero-label {
+  display: none;
+  position: absolute;
+  top: -12px;
+  left: 34px;
+  width: 15.5rem;
+  pointer-events: none;
+  transition: opacity 240ms var(--ease-ui);
+}
+.hero-callout[data-side="left"] .hero-label { left: auto; right: 34px; text-align: right; }
+@media (min-width: 1024px) {
+  .hero-label { display: block; }
+}
+
+.hero-leader {
+  position: absolute;
+  top: 11px;
+  left: -26px;
+  width: 22px;
+  height: 1px;
+  background: var(--color-signal);
+  transform-origin: left center;
+  transition: scale 320ms var(--ease-ui);
+}
+.hero-callout[data-side="left"] .hero-leader { left: auto; right: -26px; transform-origin: right center; }
+
+.hero-stage[data-torch="on"] .hero-callout:not([data-lit]) .hero-label { opacity: 0; }
+.hero-stage[data-torch="on"] .hero-callout:not([data-lit]) .hero-leader { scale: 0 1; }
+
+/* ------------------------------------------- readout (phones and tablets) */
+
+.hero-readout {
+  position: absolute;
+  z-index: 6;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+@media (min-width: 1024px) {
+  .hero-readout { display: none; }
+}
+.hero-readoutItem {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: baseline;
+  column-gap: 10px;
+  row-gap: 2px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgb(0 0 0 / 0.62);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12);
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+.hero-stage[data-torch="on"] .hero-readoutItem:not([data-active]) { display: none; }
+
+/* ------------------------------------------------------------------ copy */
+
+.hero-copy {
+  position: relative;
+  z-index: 5;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: calc(env(safe-area-inset-top) + 104px);
+  pointer-events: none;
+}
+.hero-copy a,
+.hero-copy button { pointer-events: auto; }
+@media (min-width: 1024px) {
+  .hero-copy { justify-content: center; padding-top: 40px; }
+}
+
+.hero-hint {
+  opacity: 0;
+  transition: opacity 400ms var(--ease-ui) 600ms;
+}
+.hero-stage[data-torch="on"] .hero-hint { opacity: 1; }

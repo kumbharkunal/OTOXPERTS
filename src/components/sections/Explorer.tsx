@@ -21,19 +21,29 @@ export function Explorer() {
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const uid = useId();
 
+  // While we scroll to a chosen tab, ignore the steps passed on the way (no flicker back).
+  const heading = useRef<{ to: number; until: number } | null>(null);
+
   // The scroll layer announces progress; we only follow it.
   useEffect(() => {
-    const onStep = (e: Event) => setActive((e as CustomEvent<number>).detail);
+    const onStep = (e: Event) => {
+      const step = (e as CustomEvent<number>).detail;
+      const h = heading.current;
+      if (h && performance.now() < h.until && step !== h.to) return;
+      heading.current = null;
+      setActive(step);
+    };
     window.addEventListener("ox:explorer-step", onStep);
     return () => window.removeEventListener("ox:explorer-step", onStep);
   }, []);
 
   const select = useCallback((i: number, focus = false) => {
     setActive(i);
-    if (focus) tabRefs.current[i]?.focus();
+    if (focus) tabRefs.current[i]?.focus({ preventScroll: true });
     // In scroll-driven mode, move the page to that step so scroll and state agree.
     const track = document.querySelector<HTMLElement>("[data-explorer-track]");
     if (track?.dataset.scrolly === "on" && !prefersReducedMotion()) {
+      heading.current = { to: i, until: performance.now() + 1200 };
       const start = track.getBoundingClientRect().top + window.scrollY;
       const span = track.offsetHeight - window.innerHeight;
       const y = start + (span * (i + 0.5)) / cats.length;

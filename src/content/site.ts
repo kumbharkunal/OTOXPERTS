@@ -105,7 +105,7 @@ export const site = {
         note: "The front door reads 112 µm. Resprayed.",
         status: "fail" as Status,
         side: "right" as const,
-        pos: { desktop: { x: 77, y: 57 }, mobile: { x: 64, y: 79 } },
+        pos: { desktop: { x: 82, y: 62.5 }, mobile: { x: 64, y: 79 } },
       },
       {
         id: "bumper",
@@ -114,7 +114,7 @@ export const site = {
         note: "Polished over, still visible in daylight.",
         status: "attn" as Status,
         side: "left" as const,
-        pos: { desktop: { x: 41, y: 64 }, mobile: { x: 15, y: 80 } },
+        pos: { desktop: { x: 49.5, y: 66 }, mobile: { x: 15, y: 80 } },
       },
       {
         id: "tyre",
@@ -123,7 +123,7 @@ export const site = {
         note: "Made in week 38 of 2024, older than the car.",
         status: "attn" as Status,
         side: "left" as const,
-        pos: { desktop: { x: 49, y: 68 }, mobile: { x: 27, y: 81.5 } },
+        pos: { desktop: { x: 57.5, y: 69 }, mobile: { x: 27, y: 81.5 } },
       },
       {
         id: "bonnet",
@@ -133,7 +133,7 @@ export const site = {
         status: "attn" as Status,
         side: "right" as const,
         desktopOnly: true,
-        pos: { desktop: { x: 56, y: 56 }, mobile: { x: 40, y: 64 } },
+        pos: { desktop: { x: 63, y: 58 }, mobile: { x: 40, y: 64 } },
       },
     ],
   },

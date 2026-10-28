@@ -59,8 +59,8 @@ function HeroPlaceholder({ label }: { label?: string }) {
             <line key={i} x1="1010" y1={168 + i * 18} x2="1390" y2={168 + i * 18} strokeWidth="1" />
           ))}
         </g>
-        <line x1="420" y1="640" x2="1600" y2="640" stroke="rgb(255 255 255 / 0.22)" strokeWidth="2" />
-        <path d={LOGO_PATHS.carline} fill="#fff" transform="translate(1525 448) scale(-1 1)" />
+        <line x1="560" y1="622" x2="1600" y2="622" stroke="rgb(255 255 255 / 0.22)" strokeWidth="2" />
+        <path d={LOGO_PATHS.carline} fill="#fff" transform="translate(1582.5 465.5) scale(-0.9 0.9)" />
       </svg>
       <svg
         viewBox="0 0 900 1600"

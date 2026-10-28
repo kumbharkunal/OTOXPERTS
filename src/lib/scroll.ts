@@ -81,5 +81,8 @@ export function unlockScroll() {
   b.right = "";
   b.width = "";
   window.scrollTo(0, lockedY);
+  // While the body was fixed the page was only viewport-tall; Lenis must re-measure
+  // before the next scrollTo, or it clamps every target to 0.
+  lenis?.resize();
   lenis?.start();
 }

@@ -19,14 +19,14 @@ export default function ProblemReveal() {
           scrollTrigger: { trigger: scope.current, start: "top bottom", end: "top top", scrub: true },
         });
 
-        splitLines(document.getElementById("problem-title"), document.getElementById("problem-title"));
+        const undoSplit = splitLines(document.getElementById("problem-title"), document.getElementById("problem-title"));
 
         const finds = gsap.utils.toArray<HTMLElement>("[data-find]");
         finds.forEach((row) => {
           const dot = row.querySelector("[data-find-dot]");
           const body = row.querySelector("div");
           gsap
-            .timeline({ scrollTrigger: { trigger: row, start: "top 88%", once: true } })
+            .timeline({ scrollTrigger: { trigger: row, start: "top 88%", toggleActions: "play none none none" } })
             .from(dot, { scale: 0.6, opacity: 0, duration: 0.35, ease: "back.out(2)" })
             .from(body, { opacity: 0, x: -8, duration: 0.5, ease: "power2.out" }, "-=0.15");
         });
@@ -37,8 +37,9 @@ export default function ProblemReveal() {
           duration: 0.7,
           ease: "power2.out",
           stagger: 0.08,
-          scrollTrigger: { trigger: "[data-selfcheck]", start: "top 86%", once: true },
+          scrollTrigger: { trigger: "[data-selfcheck]", start: "top 86%", toggleActions: "play none none none" },
         });
+        return () => undoSplit?.();
       });
       return () => mm.revert();
     },

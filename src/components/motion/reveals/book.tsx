@@ -18,7 +18,8 @@ export default function BookReveal() {
             scrollTrigger: { trigger: scope.current, start: "top 85%", end: "top 25%", scrub: true },
           },
         );
-        splitLines(document.getElementById("book-title"), document.getElementById("book"));
+        const undoSplit = splitLines(document.getElementById("book-title"), document.getElementById("book"));
+        return () => undoSplit?.();
       });
       return () => mm.revert();
     },

@@ -15,7 +15,7 @@ export default function ServicesReveal() {
           duration: 0.7,
           ease: "expo.out",
           stagger: 0.08,
-          scrollTrigger: { trigger: "#services table", start: "top 82%", once: true },
+          scrollTrigger: { trigger: "#services table", start: "top 82%", toggleActions: "play none none none" },
         });
         gsap.from("[data-service]", {
           opacity: 0,
@@ -23,7 +23,7 @@ export default function ServicesReveal() {
           duration: 0.6,
           ease: "power2.out",
           stagger: 0.06,
-          scrollTrigger: { trigger: "[data-service]", start: "top 88%", once: true },
+          scrollTrigger: { trigger: "[data-service]", start: "top 88%", toggleActions: "play none none none" },
         });
       });
       return () => mm.revert();

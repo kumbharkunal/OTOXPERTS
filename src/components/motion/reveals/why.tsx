@@ -15,7 +15,7 @@ export default function WhyReveal() {
             opacity: 0,
             duration: 0.4,
             ease: "back.out(2.2)",
-            scrollTrigger: { trigger: row, start: "top 82%", once: true },
+            scrollTrigger: { trigger: row, start: "top 82%", toggleActions: "play none none none" },
           });
         });
         gsap.from("[data-pillar]", {
@@ -24,7 +24,7 @@ export default function WhyReveal() {
           duration: 0.6,
           ease: "power2.out",
           stagger: 0.07,
-          scrollTrigger: { trigger: "[data-pillar]", start: "top 88%", once: true },
+          scrollTrigger: { trigger: "[data-pillar]", start: "top 88%", toggleActions: "play none none none" },
         });
       });
       return () => mm.revert();

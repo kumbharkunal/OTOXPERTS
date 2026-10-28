@@ -22,7 +22,7 @@ export default function ExplorerReveal() {
           duration: 1.4,
           ease: "power2.inOut",
           stagger: 0.06,
-          scrollTrigger: { trigger: "[data-diagram]", start: "top 80%", once: true },
+          scrollTrigger: { trigger: "[data-diagram]", start: "top 80%", toggleActions: "play none none none" },
         });
       });
       mm.add(`(min-width: 1024px) and ${MOTION_OK}`, () => {

@@ -20,10 +20,15 @@ export default function ReportReveal() {
         const below = rows.filter((r) => r.getBoundingClientRect().top > window.innerHeight * 0.9);
         gsap.set(below, { opacity: 0, x: -6 });
 
+        // No `once`: triggers that kill themselves during a refresh can crash ScrollTrigger.
+        // A set remembers which rows have played instead.
+        const played = new WeakSet<Element>();
         ScrollTrigger.batch(below, {
           start: "top 90%",
-          once: true,
-          onEnter: (batch) => {
+          onEnter: (entered) => {
+            const batch = entered.filter((row) => !played.has(row));
+            batch.forEach((row) => played.add(row));
+            if (!batch.length) return;
             gsap.to(batch, { opacity: 1, x: 0, duration: 0.45, ease: "power2.out", stagger: 0.06 });
             batch.forEach((row) => {
               const span = (row as HTMLElement).querySelector<HTMLElement>("[data-count]");
@@ -51,10 +56,10 @@ export default function ReportReveal() {
           duration: 0.5,
           ease: "power2.out",
           stagger: 0.07,
-          scrollTrigger: { trigger: "[data-report-photo]", start: "top 88%", once: true },
+          scrollTrigger: { trigger: "[data-report-photo]", start: "top 88%", toggleActions: "play none none none" },
         });
 
-        const verdict = gsap.timeline({ scrollTrigger: { trigger: "[data-report-verdict]", start: "top 85%", once: true } });
+        const verdict = gsap.timeline({ scrollTrigger: { trigger: "[data-report-verdict]", start: "top 85%", toggleActions: "play none none none" } });
         verdict
           .from("[data-report-verdict] > div:first-child", { opacity: 0, scale: 0.97, duration: 0.3, ease: "power2.out", transformOrigin: "left center" })
           .from("[data-signature]", { drawSVG: 0, duration: 0.9, ease: "power1.inOut" }, "+=0.1");

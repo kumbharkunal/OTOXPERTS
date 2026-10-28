@@ -37,8 +37,8 @@ All copy, links, prices, cities and callout positions live in [`src/content/site
 The page ships with designed placeholders at the exact aspect ratio of each photo, so swapping needs no code changes.
 
 1. Generate the eight images with the prompts in [`IMAGE_PROMPTS.md`](IMAGE_PROMPTS.md). Download each as PNG.
-2. Drop the files into `_incoming-images/`. The name only needs to start with the image number, e.g. `01.png` or `01-hero-bay.png`.
-3. Run `npm run images`. It crops and resizes each file, writes `public/images/<name>.jpg`, generates blur placeholders and updates `src/content/images.generated.json`. The originals stay in `_incoming-images/`, which git ignores.
+2. Drop the files into `_incoming-images/`, named after the image (`hero-bay.png`) or starting with its number (`01.png`, `01-hero-bay.png`). Don't put originals in `public/`: everything there is published.
+3. Run `npm run images`. It crops each file to its exact ratio (never enlarging it), writes `public/images/<name>.jpg`, generates blur placeholders and updates `src/content/images.generated.json`. The originals stay in `_incoming-images/`, which git ignores.
 4. Re-place the hero callouts on the real car:
    - Run `npm run dev` and open `http://localhost:3000/?calibrate`.
    - Click each flaw on the car. The coordinates are copied to your clipboard.

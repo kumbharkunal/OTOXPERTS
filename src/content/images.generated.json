@@ -1,1 +1,50 @@
-{}
+{
+  "detail-obd": {
+    "src": "/images/detail-obd.jpg",
+    "width": 1200,
+    "height": 1200,
+    "blurDataURL": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADQAQCdASoQABAAA4BaJaQAAksEO3gjAAD+9X+Szke3pSqqitcGccdoAecrWqYPO5desKGW1+IO/rVgTf8u/HOlN87Vu2Z210KmQiOlnGg4QAAA"
+  },
+  "detail-paint-gauge": {
+    "src": "/images/detail-paint-gauge.jpg",
+    "width": 1200,
+    "height": 1200,
+    "blurDataURL": "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAABQAgCdASoQABAAA4BaJZwCw7YsjWs3FX5H5RgA/ra+XlfoA8qoakT8ckZJZGm9O8wNS4OKPwN+mx1TZBeXpDe+L2tPJ5CCn/PtvpBikkxnj47uoaieOwE+y2VVU1D4b5PeGBAsxd9EAAAA"
+  },
+  "detail-tread-gauge": {
+    "src": "/images/detail-tread-gauge.jpg",
+    "width": 1200,
+    "height": 1200,
+    "blurDataURL": "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAAAwAgCdASoQABAAA4BaJZwAD4cwhrxBtEhITAD+1znu5lESh4fwq/DOXWPgg8kd2OJBLKb1wbuLppYqw+zRBU6CcGDgShgKzc47dJVtVAFMIvlxyKaliU/1l0wC5qJ/nNxKJjcAy8689RwA"
+  },
+  "detail-underbody": {
+    "src": "/images/detail-underbody.jpg",
+    "width": 1200,
+    "height": 1200,
+    "blurDataURL": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAADwAQCdASoQABAAA4BaJaQAAxeQjHSBV5AA/jR+e0IvIwTyhEhMh0iVwVONfIHlClulqfsBaski0yXJPC/s2oI+n+D7sse8qYX32R7HC6dA8CGyg/opOvOyAAA="
+  },
+  "engineer-walkround": {
+    "src": "/images/engineer-walkround.jpg",
+    "width": 1536,
+    "height": 1024,
+    "blurDataURL": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAADwAQCdASoQAAsAA4BaJZwAArJWMXf7xAAA/QDP71mIyPAT1t7y7fNaYxHPLxanZ4F/LQUl6zVV3dtCNzbxzNManmTh5pO4OXCU9Njf8v6X8tTw4rLmAgAPAAA="
+  },
+  "hero-bay-mobile": {
+    "src": "/images/hero-bay-mobile.jpg",
+    "width": 936,
+    "height": 1664,
+    "blurDataURL": "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAADQAwCdASoQABwAPu1iqU2ppaQiMAgBMB2JaQABHu+Hyn8L5+ZI/AAA/v4VWrV9HiiNznHuIwleniV14U/5XrORxX9fpBNnRs/d/OmIU4mlceiKuIgeyzn7ZkwkJq6JXfXZC2DevF8+AAAA"
+  },
+  "hero-bay": {
+    "src": "/images/hero-bay.jpg",
+    "width": 1664,
+    "height": 936,
+    "blurDataURL": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAACwAQCdASoQAAkAA4BaJaQAApt3f4zgAP74VmyBjTvlS/4j+VLO2tZwPYQsYYjqqGda7Aa7ZYS2LXWv0nNQEBUHE0gAAA=="
+  },
+  "stockyard": {
+    "src": "/images/stockyard.jpg",
+    "width": 1120,
+    "height": 1400,
+    "blurDataURL": "data:image/webp;base64,UklGRpoAAABXRUJQVlA4II4AAADwAwCdASoQABQAPu1iqU2ppaOiMAgBMB2JYwAD5koMiEJHtE/BLFJAAP6yMPoSscJWAF4xtCzrax/BMRqEJOfSBwl4U2bdBV4luTgJDNvk0Smbvdjm6o2JzdGrWqYPjIX6ZQ8RKK+f4fXONDpPPD9pg8yvzlQm99Fxjfdr4V1SLH7vIxPKa7qNA0ThzwAA"
+  }
+}

@@ -10,9 +10,10 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 type Anchor = { el: HTMLElement; id: string; x: number; y: number };
 
 /**
- * The inspection light (docs/PLAN.md §7). Everything here is an enhancement over a
- * fully lit, server-rendered frame: it only switches the stage into torch mode once
- * it is running, and never under reduced motion.
+ * The inspection light (docs/PLAN.md §7). With JS and motion, CSS already paints the
+ * stage torch-ready (dark bay, one readout slot); this controller switches on the light.
+ * If it never runs, the frame lights itself after 8 s (html.torch-ready, see layout).
+ * Under reduced motion it does nothing and the server-rendered frame stays fully lit.
  *
  * Per frame the work is two transforms (beam + counter-moved inner) and a few
  * distance checks, so the light stays on the compositor.
@@ -100,7 +101,7 @@ export default function InspectionLight() {
             qy(y);
           };
 
-          // Load moment: the bay goes dark, the light comes on and finds the first flaw.
+          // Load moment: in the dark bay the light comes on and finds the first flaw.
           const intro = gsap.timeline({ delay: 0.25 });
           intro.to(beam, { opacity: 1, duration: 0.3, ease: "power1.out" }, 0);
           if (fine) {

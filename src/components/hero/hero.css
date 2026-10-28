@@ -2,8 +2,11 @@
  * Hero: the inspection light (docs/PLAN.md §7).
  * Layers: base photo · dim overlay · beam (same photo, masked, moved by transforms) ·
  * scrim · callouts (same cover-box geometry) · copy.
- * Torch mode exists only while the controller sets data-torch="on"; without it the
- * frame is fully lit with every callout visible (no JS, reduced motion, failures).
+ * With JS and motion the stage paints torch-ready: the bay is already dark and the
+ * readout holds one slot, so when the controller sets data-torch="on" only the light
+ * itself appears (no layout shift, a settled first frame). Without JS or with reduced
+ * motion the frame is fully lit with every callout visible. The head script drops
+ * html.torch-ready after 8 s, so a light that never starts leaves the frame lit too.
  */
 
 .hero-curtain {
@@ -257,3 +260,12 @@
   transition: opacity 400ms var(--ease-ui) 600ms;
 }
 .hero-stage[data-torch="on"] .hero-hint { opacity: 1; }
+
+/* ---------------------------------------- torch-ready, before the controller */
+
+@media (prefers-reduced-motion: no-preference) {
+  .torch-ready .hero-stage:not([data-torch]) .hero-dim { opacity: 0.76; }
+  .torch-ready .hero-stage:not([data-torch]) .hero-label { opacity: 0; }
+  .torch-ready .hero-stage:not([data-torch]) .hero-leader { scale: 0 1; }
+  .torch-ready .hero-stage:not([data-torch]) .hero-readoutItem:not([data-active]) { display: none; }
+}

@@ -28,6 +28,35 @@ test("renders the hero from HTML with no console errors or hydration warnings", 
   expect(problems).toEqual([]);
 });
 
+test("the hero paints torch-ready and the light comes on without a layout shift", async ({ page, browserName, isMobile }) => {
+  test.skip(browserName !== "chromium" || !isMobile, "layout-shift entries are Chromium-only; the readout is the phone layout");
+  type ShiftWindow = Window & { __cls?: number };
+  await page.addInitScript(() => {
+    const w = window as ShiftWindow;
+    w.__cls = 0;
+    new PerformanceObserver((list) => {
+      for (const e of list.getEntries() as unknown as Array<{ value: number; hadRecentInput: boolean }>) {
+        if (!e.hadRecentInput) w.__cls = (w.__cls ?? 0) + e.value;
+      }
+    }).observe({ type: "layout-shift", buffered: true });
+  });
+  await page.goto("/");
+  await expect(page.locator(".hero-readoutItem:visible")).toHaveCount(1);
+  await expect(page.locator("[data-hero-stage]")).toHaveAttribute("data-torch", "on", { timeout: 8000 });
+  await page.waitForTimeout(2500); // the intro sweep across the callouts
+  await expect(page.locator(".hero-readoutItem:visible")).toHaveCount(1);
+  expect(await page.evaluate(() => (window as ShiftWindow).__cls ?? 0)).toBeLessThan(0.01);
+});
+
+test("if the light never starts, the hero lights itself and shows every reading", async ({ page, browserName, isMobile }) => {
+  test.skip(browserName !== "chromium" || !isMobile, "the readout is the phone layout");
+  await page.route(/\/_next\/static\/.*\.js/, (r) => r.abort());
+  await page.goto("/");
+  await expect(page.locator(".hero-readoutItem:visible")).toHaveCount(1);
+  await expect(page.locator(".hero-readoutItem:visible")).toHaveCount(3, { timeout: 10_000 });
+  await expect(page.locator(".hero-dim")).toHaveCSS("opacity", "0");
+});
+
 test("every section has its heading and the page has exactly one h1", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("h1")).toHaveCount(1);

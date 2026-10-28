@@ -78,7 +78,8 @@ export const site = {
   },
 
   hero: {
-    h1: "Don't buy blind.",
+    /** Two fixed lines, so the headline keeps its height whichever font is showing. */
+    h1: ["Don't buy", "blind."],
     sub: "Certified engineers inspect your new car at the dealership, before you sign for it.",
     primary: "Book a PDI on WhatsApp",
     secondary: `Call ${phoneDisplay}`,

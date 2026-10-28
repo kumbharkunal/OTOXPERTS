@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { Fragment, type CSSProperties } from "react";
 import { PhoneIcon, CheckIcon, MapPinIcon } from "@phosphor-icons/react/ssr";
 import { site } from "@/content/site";
 import { waLink, telLink } from "@/lib/whatsapp";
@@ -35,7 +35,7 @@ export function Hero() {
           </div>
         </div>
 
-        {/* 2. Dim overlay: the bay with the lights off (torch mode only) */}
+        {/* 2. Dim overlay: the bay with the lights off (JS and motion only) */}
         <div className="hero-dim" aria-hidden="true" />
 
         {/* 3. The beam: same photo, masked, moved by transforms only */}
@@ -81,7 +81,7 @@ export function Hero() {
           </ol>
         </div>
 
-        {/* Readout for phones and tablets: the lit callout, or all of them without JS */}
+        {/* Readout for phones and tablets: the lit callout, or all of them without JS or motion */}
         <ul className="hero-readout" data-readout aria-live="polite">
           {hero.callouts
             .filter((c) => !("desktopOnly" in c && c.desktopOnly))
@@ -100,7 +100,12 @@ export function Hero() {
           <div className="container-x">
             <div className="max-w-[34rem] lg:max-w-[37rem]">
               <h1 id="hero-title" className="display-1 text-paper">
-                {hero.h1}
+                {hero.h1.map((line, i) => (
+                  <Fragment key={line}>
+                    {i > 0 && " "}
+                    <span className="block">{line}</span>
+                  </Fragment>
+                ))}
               </h1>
               <p className="body-l mt-5 max-w-[28rem] text-white/80 lg:mt-6">{hero.sub}</p>
               <div className="mt-7 flex flex-col gap-2.5 min-[420px]:flex-row min-[420px]:flex-wrap lg:mt-9">

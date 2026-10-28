@@ -33,7 +33,7 @@ export default async function OpengraphImage() {
           <path fill="#ED0C0C" fillRule="evenodd" d={LOGO_PATHS.xperts} />
         </svg>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ fontSize: 112, lineHeight: 0.95, letterSpacing: -3 }}>{site.hero.h1}</div>
+          <div style={{ fontSize: 112, lineHeight: 0.95, letterSpacing: -3 }}>{site.hero.h1.join(" ")}</div>
           <div style={{ display: "flex", alignItems: "center", marginTop: 28 }}>
             <div style={{ width: 56, height: 3, background: "#ED0C0C", marginRight: 20 }} />
             <div style={{ fontSize: 40, letterSpacing: -1 }}>{site.brand.tagline}</div>

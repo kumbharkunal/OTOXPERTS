@@ -5,8 +5,8 @@ import dynamic from "next/dynamic";
 
 /**
  * The torch controller is its own chunk, started once the browser is idle after load.
- * Until then the hero is the fully lit, server-rendered frame; then the bay goes dark
- * and the light sweeps in. GSAP never blocks the H1.
+ * Until then the bay waits in the dark (hero.css, torch-ready); then the light comes on
+ * and sweeps in. GSAP never blocks the H1.
  */
 const InspectionLight = dynamic(() => import("./InspectionLight"), { ssr: false });
 

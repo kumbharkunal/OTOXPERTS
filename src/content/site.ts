@@ -16,8 +16,14 @@ export type Status = "pass" | "attn" | "fail";
 export type Point = { x: number; y: number };
 
 const ig = "https://www.instagram.com";
-const reel = (id: string) => `${ig}/reel/${id}/`;
 const post = (id: string) => `${ig}/p/${id}/`;
+
+/*
+ * Videos play on this site, never as links out to Instagram (Kunal's call, for now).
+ * `video` is the Instagram reel code: instagram.com/reel/<code>/ is where it came from, and
+ * `npm run videos` turns _incoming-videos/<code>.mp4 into public/videos/<code>.mp4.
+ * A video whose file isn't there yet renders as plain text.
+ */
 
 const phoneDisplay = "+91 92170 49330";
 const phoneTel = "+919217049330";
@@ -148,14 +154,14 @@ export const site = {
     image: { key: "stockyard", alt: "Rows of new cars waiting in a stockyard in morning light" },
     findsTitle: "Found by our engineers",
     findsNote: "From inspection videos OtoXperts has published on Instagram.",
-    linkLabel: "Watch the reel",
+    linkLabel: "Watch the video",
     finds: [
-      { text: "Roof and quarter panel repainted, with rust across the body.", url: reel("DdG0NxypRuM") },
-      { text: "Fender repaired and both bumpers repainted.", url: reel("DcQj00Zp3n7") },
-      { text: "Two doors already replaced.", url: reel("Da-1Xe6poBK") },
-      { text: "An odometer reading that didn't add up.", place: "Sonipat", url: reel("DcxxZOBpTvd") },
-      { text: "Engine and sensor faults. The buyer chose another car, which passed.", place: "Delhi", url: reel("Dcxxjjkp4Zz") },
-      { text: "Repainted panels. The buyer refused the car.", place: "Delhi", url: reel("Da2voU9J-QG") },
+      { text: "Roof and quarter panel repainted, with rust across the body.", video: "DdG0NxypRuM" },
+      { text: "Fender repaired and both bumpers repainted.", video: "DcQj00Zp3n7" },
+      { text: "Two doors already replaced.", video: "Da-1Xe6poBK" },
+      { text: "An odometer reading that didn't add up.", place: "Sonipat", video: "DcxxZOBpTvd" },
+      { text: "Engine and sensor faults. The buyer chose another car, which passed.", place: "Delhi", video: "Dcxxjjkp4Zz" },
+      { text: "Repainted panels. The buyer refused the car.", place: "Delhi", video: "Da2voU9J-QG" },
     ],
     selfCheckTitle: "Three checks you can do yourself",
     selfChecks: [
@@ -491,21 +497,21 @@ export const site = {
     ask: "Ask about your city on WhatsApp",
     confirm: { confirm: true, source: "Launch posts DWhTujDk3Gq and DWGlHtvCTl5; customer reels; otoxperts.com lists 32 cities" },
     hubs: [
-      { name: "Delhi NCR", lat: 28.61, lon: 77.21, base: true, url: reel("Da-1zKDJNr4") },
-      { name: "Bengaluru", lat: 12.97, lon: 77.59, url: post("DWhTujDk3Gq") },
-      { name: "Ahmedabad", lat: 23.02, lon: 72.57, url: post("DWGlHtvCTl5") },
+      { name: "Delhi NCR", lat: 28.61, lon: 77.21, base: true, video: "Da-1zKDJNr4" },
+      { name: "Bengaluru", lat: 12.97, lon: 77.59, video: "DWhTujDk3Gq" },
+      { name: "Ahmedabad", lat: 23.02, lon: 72.57, video: "DWGlHtvCTl5" },
     ],
     inspected: [
-      { name: "Ludhiana", lat: 30.9, lon: 75.85, url: reel("DXQ6GbAiXWL") },
-      { name: "Narnaul", lat: 28.04, lon: 76.11, url: reel("De6NUB-JUU5") },
-      { name: "Mathura", lat: 27.49, lon: 77.67, url: reel("Dd9FliKp0kX") },
-      { name: "Agra", lat: 27.18, lon: 78.01, url: reel("DYmJHX-JgOZ") },
-      { name: "Hardoi", lat: 27.4, lon: 80.13, url: reel("DXeYKG7Cazx") },
-      { name: "Himmatnagar", lat: 23.6, lon: 72.97, url: reel("DddZMXzpCOV") },
-      { name: "Indore", lat: 22.72, lon: 75.86, url: reel("DeeU_nJJVcM") },
-      { name: "Surat", lat: 21.17, lon: 72.83, url: reel("Daz8TKupQfD") },
-      { name: "Bhiwandi", lat: 19.3, lon: 73.06, url: reel("DddgNAcpIgi") },
-      { name: "Hyderabad", lat: 17.39, lon: 78.49, url: reel("DXeacKviZfF") },
+      { name: "Ludhiana", lat: 30.9, lon: 75.85, video: "DXQ6GbAiXWL" },
+      { name: "Narnaul", lat: 28.04, lon: 76.11, video: "De6NUB-JUU5" },
+      { name: "Mathura", lat: 27.49, lon: 77.67, video: "Dd9FliKp0kX" },
+      { name: "Agra", lat: 27.18, lon: 78.01, video: "DYmJHX-JgOZ" },
+      { name: "Hardoi", lat: 27.4, lon: 80.13, video: "DXeYKG7Cazx" },
+      { name: "Himmatnagar", lat: 23.6, lon: 72.97, video: "DddZMXzpCOV" },
+      { name: "Indore", lat: 22.72, lon: 75.86, video: "DeeU_nJJVcM" },
+      { name: "Surat", lat: 21.17, lon: 72.83, video: "Daz8TKupQfD" },
+      { name: "Bhiwandi", lat: 19.3, lon: 73.06, video: "DddgNAcpIgi" },
+      { name: "Hyderabad", lat: 17.39, lon: 78.49, video: "DXeacKviZfF" },
     ],
   },
 
@@ -535,14 +541,23 @@ export const site = {
     follow: "Follow @otoxperts",
     reelsTitle: "Customers on camera",
     reels: [
-      { label: "Narnaul", detail: "New car PDI", url: reel("De6NUB-JUU5") },
-      { label: "Indore", detail: "Switched from another PDI company", url: reel("DeeU_nJJVcM") },
-      { label: "Faridabad", detail: "New car PDI", url: reel("DeeAdEApSYx") },
-      { label: "Ghaziabad", detail: "New car PDI", url: reel("DeZBxzXpaXo") },
-      { label: "Himmatnagar", detail: "Tata Sierra", url: reel("DddZMXzpCOV") },
-      { label: "Tata Nexon", detail: "Passed our PDI", url: reel("De1IN-mJXLX") },
+      { label: "Narnaul", detail: "New car PDI", video: "De6NUB-JUU5" },
+      { label: "Indore", detail: "Switched from another PDI company", video: "DeeU_nJJVcM" },
+      { label: "Faridabad", detail: "New car PDI", video: "DeeAdEApSYx" },
+      { label: "Ghaziabad", detail: "New car PDI", video: "DeZBxzXpaXo" },
+      { label: "Himmatnagar", detail: "Tata Sierra", video: "DddZMXzpCOV" },
+      { label: "Tata Nexon", detail: "Passed our PDI", video: "De1IN-mJXLX" },
     ],
     elsewhere: "Also on",
+  },
+
+  player: {
+    close: "Close video",
+    prev: "Previous video",
+    next: "Next video",
+    play: "Play video",
+    /** Read out after a trigger's own text, e.g. "Narnaul, New car PDI, video, 0:42". */
+    srKind: "video",
   },
 
   faq: {

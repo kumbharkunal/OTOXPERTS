@@ -1,5 +1,7 @@
+import { PlayIcon } from "@phosphor-icons/react/ssr";
 import { site } from "@/content/site";
 import { waLink } from "@/lib/whatsapp";
+import { ReelLink } from "@/components/reels/ReelLink";
 import { RevealMount } from "@/components/motion/RevealMount";
 
 const { cities } = site;
@@ -40,16 +42,26 @@ export function Cities() {
           <ul className="mt-3 flex flex-wrap gap-2">
             {cities.hubs.map((h) => (
               <li key={h.name}>
-                <a
-                  href={h.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <ReelLink
+                  code={h.video}
+                  title={h.name}
+                  group="cities"
                   className="pressable inline-flex min-h-11 items-center gap-2 rounded-full bg-carbon px-4 text-[0.9375rem] font-[600] text-paper"
+                  fallback={
+                    <span className="inline-flex min-h-11 items-center gap-2 rounded-full bg-carbon px-4 text-[0.9375rem] font-[600] text-paper">
+                      <span aria-hidden="true" className="size-2 rounded-full bg-signal" />
+                      {h.name}
+                    </span>
+                  }
                 >
-                  <span aria-hidden="true" className="size-2 rounded-full bg-signal" />
-                  {h.name}
-                  <span className="sr-only">(Instagram, opens in a new tab)</span>
-                </a>
+                  {() => (
+                    <>
+                      <span aria-hidden="true" className="size-2 rounded-full bg-signal" />
+                      {h.name}
+                      <PlayIcon weight="fill" aria-hidden="true" className="-mr-0.5 size-3.5 text-white/70" />
+                    </>
+                  )}
+                </ReelLink>
               </li>
             ))}
           </ul>
@@ -59,15 +71,15 @@ export function Cities() {
           <ul className="mt-2 flex flex-wrap gap-x-1 text-[0.9375rem]">
             {cities.inspected.map((c, i) => (
               <li key={c.name}>
-                <a
-                  href={c.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <ReelLink
+                  code={c.video}
+                  title={c.name}
+                  group="cities"
                   className="inline-flex min-h-11 items-center underline decoration-black/20 underline-offset-4 hover:decoration-black"
+                  fallback={<span className="inline-flex min-h-11 items-center">{c.name}</span>}
                 >
-                  {c.name}
-                  <span className="sr-only"> (customer reel on Instagram, opens in a new tab)</span>
-                </a>
+                  {() => c.name}
+                </ReelLink>
                 {i < cities.inspected.length - 1 && <span aria-hidden="true">,&nbsp;</span>}
               </li>
             ))}

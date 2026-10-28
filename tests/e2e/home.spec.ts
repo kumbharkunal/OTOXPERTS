@@ -57,6 +57,28 @@ test("if the light never starts, the hero lights itself and shows every reading"
   await expect(page.locator(".hero-dim")).toHaveCSS("opacity", "0");
 });
 
+test("videos never send people to Instagram", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator('a[href*="instagram.com/reel"]')).toHaveCount(0);
+});
+
+test("reels play on this site in a dialog that gives focus back", async ({ page }) => {
+  await page.goto("/");
+  const links = page.locator("a[data-reel]");
+  test.skip((await links.count()) === 0, "no reel files yet (npm run videos)");
+  await hydrated(page);
+  const first = links.first();
+  await expect(first).toHaveAttribute("href", /^\/videos\/[\w-]+\.mp4$/);
+  await first.scrollIntoViewIfNeeded();
+  await first.click();
+  const dialog = page.locator("dialog.reel-dialog[open]");
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator("video")).toHaveAttribute("src", /^\/videos\/[\w-]+\.mp4$/);
+  await page.keyboard.press("Escape");
+  await expect(page.locator("dialog.reel-dialog")).toHaveCount(0);
+  await expect(first).toBeFocused();
+});
+
 test("every section has its heading and the page has exactly one h1", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("h1")).toHaveCount(1);

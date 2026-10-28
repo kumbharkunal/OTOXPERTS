@@ -3,8 +3,9 @@ import { getImage } from "@/content/images";
 import { LOGO_PATHS } from "@/components/brand/logo-paths";
 
 /**
- * The hero photograph, art-directed (16:9 from 768px, 9:16 below). The base layer is
- * the LCP image; the lit layer uses identical props, so the browser downloads it once.
+ * The hero photograph, art-directed by orientation (16:9 landscape, 9:16 portrait, so a
+ * portrait tablet keeps the whole car). The base layer is the LCP image; the lit layer
+ * uses identical props, so the browser downloads it once.
  * Until the photos exist, a line drawing of the car stands in at the same ratios.
  */
 export function HeroArt({ layer, alt }: { layer: "base" | "lit"; alt: string }) {
@@ -29,7 +30,7 @@ export function HeroArt({ layer, alt }: { layer: "base" | "lit"; alt: string }) 
 
   return (
     <picture>
-      {mobileSet && <source media="(max-width: 767px)" srcSet={mobileSet} sizes="100vw" />}
+      {mobileSet && <source media="(orientation: portrait)" srcSet={mobileSet} sizes="100vw" />}
       {/* eslint-disable-next-line jsx-a11y/alt-text -- alt comes from getImageProps */}
       <img {...img} aria-hidden={isBase ? undefined : true} decoding={isBase ? "sync" : "async"} />
     </picture>
@@ -44,7 +45,7 @@ function HeroPlaceholder({ label }: { label?: string }) {
       <svg
         viewBox="0 0 1600 900"
         preserveAspectRatio="xMidYMid slice"
-        className="max-md:hidden"
+        className="portrait:hidden"
         role={label ? "img" : undefined}
         aria-label={label}
         aria-hidden={label ? undefined : true}
@@ -65,7 +66,7 @@ function HeroPlaceholder({ label }: { label?: string }) {
       <svg
         viewBox="0 0 900 1600"
         preserveAspectRatio="xMidYMid slice"
-        className="md:hidden"
+        className="landscape:hidden"
         aria-hidden="true"
       >
         <rect width="900" height="1600" fill="#08090a" />

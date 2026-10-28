@@ -43,7 +43,7 @@ export default function ReportReveal() {
                 v: target,
                 duration: 0.7,
                 ease: "power3.out",
-                onUpdate: () => (span.textContent = `${Math.round(o.v)} ${suffix}`.trim()),
+                onUpdate: () => (span.textContent = `${Math.round(o.v)}\u00a0${suffix}`.trim()),
                 onComplete: () => (span.textContent = text),
               });
             });

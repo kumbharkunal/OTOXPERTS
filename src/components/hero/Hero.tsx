@@ -81,18 +81,22 @@ export function Hero() {
           </ol>
         </div>
 
-        {/* Readout for phones and tablets: the lit callout, or all of them without JS or motion */}
+        {/* Readout: the lit callout on phones and tablets; every callout wherever the light is off */}
         <ul className="hero-readout" data-readout aria-live="polite">
-          {hero.callouts
-            .filter((c) => !("desktopOnly" in c && c.desktopOnly))
-            .map((c, i) => (
-              <li key={c.id} className="hero-readoutItem" data-readout-item={c.id} data-active={i === 0 ? "" : undefined}>
-                <span className="size-2 self-center rounded-full bg-signal" aria-hidden="true" />
-                <span className="text-white/75">{c.title}</span>
-                <span className="reading text-right text-white">{c.reading}</span>
-                <span className="col-start-2 col-end-4 text-[0.8125rem] text-white/65">{c.note}</span>
-              </li>
-            ))}
+          {hero.callouts.map((c, i) => (
+            <li
+              key={c.id}
+              className="hero-readoutItem"
+              data-readout-item={c.id}
+              data-active={i === 0 ? "" : undefined}
+              data-desktop-only={"desktopOnly" in c && c.desktopOnly ? "" : undefined}
+            >
+              <span className="size-2 self-center rounded-full bg-signal" aria-hidden="true" />
+              <span className="text-white/75">{c.title}</span>
+              <span className="reading text-right text-white">{c.reading}</span>
+              <span className="col-start-2 col-end-4 text-[0.8125rem] text-white/65">{c.note}</span>
+            </li>
+          ))}
         </ul>
 
         {/* 6. Copy */}

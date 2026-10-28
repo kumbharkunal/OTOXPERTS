@@ -1,0 +1,22 @@
+# CLI deploys upload the working folder, not the git tree. Keep out what git ignores:
+# local brand references, image originals, agent tooling, QA output and env files.
+_brand-ref/
+_incoming-images/
+.claude/
+.agents/
+.mcp.json
+.impeccable/
+skills-lock.json
+.env*
+.lighthouse/
+.taste-skill/
+.jury/
+.shots/
+test-results/
+playwright-report/
+blob-report/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+.next/
+node_modules/

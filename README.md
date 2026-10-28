@@ -61,7 +61,11 @@ The page ships with designed placeholders at the exact aspect ratio of each phot
 
 ## Deploying
 
-The Vercel project `otoxperts` is connected to this GitHub repository, so every push to `main` deploys to production.
+Production is the Vercel project `otoxperts` at https://otoxperts.vercel.app.
+
+Once Vercel's GitHub app can see this repository, run `vercel git connect` once; every push to `main` then deploys to production. To grant access, open GitHub, Settings, Applications, Vercel, Configure, and add `OTOXPERTS` under repository access.
+
+Until then, deploy from this folder with `vercel deploy --prod`. The CLI uploads the working folder rather than the git tree, so `.vercelignore` keeps the brand references, tool output and env files out of the upload.
 
 | Environment variable | Value |
 |---|---|

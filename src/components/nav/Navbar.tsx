@@ -1,14 +1,16 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { LazyMotion, m } from "motion/react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import dynamic from "next/dynamic";
 import { site } from "@/content/site";
-import { Logo } from "@/components/brand/Logo";
-import { MobileSheet } from "./MobileSheet";
 import { scrollToId } from "@/lib/scroll";
 import { cn } from "@/lib/cn";
 
-const loadFeatures = () => import("@/components/motion/features").then((r) => r.default);
+/**
+ * The mobile sheet (and Motion's spring with it) is its own chunk: prefetched when the
+ * browser is idle, or on the first tap, so it never weighs on the first load.
+ */
+const MobileSheet = dynamic(() => import("./MobileSheet").then((m) => m.MobileSheet), { ssr: false });
 
 type Theme = "dark" | "light";
 
@@ -21,8 +23,9 @@ function lastInDocOrder(els: Iterable<Element>) {
   return last;
 }
 
-export function Navbar() {
+export function Navbar({ logo }: { logo: ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [sheetReady, setSheetReady] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [compact, setCompact] = useState(false);
   const [theme, setTheme] = useState<Theme>("dark");
@@ -30,6 +33,8 @@ export function Navbar() {
   const pillRef = useRef<HTMLDivElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const navRef = useRef<HTMLElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+  const dotRef = useRef<HTMLSpanElement>(null);
 
   // Section theme under the nav: a 1px line through the pill's centre.
   useEffect(() => {
@@ -65,7 +70,6 @@ export function Navbar() {
 
   // Scroll-spy for the in-page links.
   useEffect(() => {
-    const ids = site.nav.links.map((l) => l.id);
     const seen = new Set<Element>();
     const io = new IntersectionObserver(
       (entries) => {
@@ -77,12 +81,25 @@ export function Navbar() {
       },
       { rootMargin: "-45% 0px -50% 0px" },
     );
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
+    site.nav.links.forEach((l) => {
+      const el = document.getElementById(l.id);
       if (el) io.observe(el);
     });
     return () => io.disconnect();
   }, []);
+
+  // The red dot slides under the active link (transform only).
+  useEffect(() => {
+    const dot = dotRef.current;
+    const link = listRef.current?.querySelector<HTMLElement>('a[aria-current="location"]');
+    if (!dot) return;
+    if (!link) {
+      dot.style.opacity = "0";
+      return;
+    }
+    dot.style.transform = `translateX(${link.offsetLeft + link.offsetWidth / 2 - 3}px)`;
+    dot.style.opacity = "1";
+  }, [active]);
 
   // Hide going down, return going up; compact after the hero.
   useEffect(() => {
@@ -110,9 +127,17 @@ export function Navbar() {
   }, []);
 
   // Load moment, part one: the logo's car line draws itself (CSS transition, see globals.css).
+  // Then, once the browser is idle, fetch the mobile sheet so the first tap is instant.
   useEffect(() => {
     const t = window.setTimeout(() => document.querySelector('[data-logo="nav-logo"]')?.setAttribute("data-drawn", ""), 120);
-    return () => window.clearTimeout(t);
+    const idle = window.requestIdleCallback
+      ? window.requestIdleCallback(() => setSheetReady(true), { timeout: 4000 })
+      : window.setTimeout(() => setSheetReady(true), 2500);
+    return () => {
+      window.clearTimeout(t);
+      if (window.cancelIdleCallback) window.cancelIdleCallback(idle);
+      else window.clearTimeout(idle);
+    };
   }, []);
 
   const go = useCallback((e: React.MouseEvent, id: string) => {
@@ -123,7 +148,7 @@ export function Navbar() {
   const isHidden = hidden && !open;
 
   return (
-    <LazyMotion features={loadFeatures} strict>
+    <>
       <header
         ref={navRef}
         data-nav-theme={open ? "dark" : theme}
@@ -153,11 +178,11 @@ export function Navbar() {
             className="pressable -my-1 flex min-h-11 items-center rounded-full pr-2"
             aria-label="OtoXperts, back to top"
           >
-            <Logo id="nav-logo" drawable className="w-21.5 lg:w-24.5" title="OtoXperts" />
+            {logo}
           </a>
 
           <nav aria-label="Main" className="hidden lg:block">
-            <ul className="flex items-center">
+            <ul ref={listRef} className="relative flex items-center">
               {site.nav.links.map((l) => {
                 const isActive = active === l.id;
                 return (
@@ -172,18 +197,15 @@ export function Navbar() {
                       )}
                     >
                       {l.label}
-                      {isActive && (
-                        <m.span
-                          layoutId="nav-active"
-                          aria-hidden="true"
-                          className="absolute bottom-1.5 left-1/2 size-1.5 -translate-x-1/2 rounded-full bg-signal"
-                          transition={{ type: "spring", duration: 0.35, bounce: 0.1 }}
-                        />
-                      )}
                     </a>
                   </li>
                 );
               })}
+              <span
+                ref={dotRef}
+                aria-hidden="true"
+                className="pointer-events-none absolute bottom-1.5 left-0 size-1.5 rounded-full bg-signal opacity-0 transition-[transform,opacity] duration-350 ease-ui motion-reduce:transition-none"
+              />
             </ul>
           </nav>
 
@@ -209,7 +231,10 @@ export function Navbar() {
               aria-expanded={open}
               aria-controls="mobile-menu"
               aria-label={open ? site.nav.menuClose : site.nav.menuOpen}
-              onClick={() => setOpen((v) => !v)}
+              onClick={() => {
+                setSheetReady(true);
+                setOpen((v) => !v);
+              }}
             >
               <span aria-hidden="true" className="relative block h-3 w-5">
                 <span
@@ -230,7 +255,7 @@ export function Navbar() {
         </div>
       </header>
 
-      <MobileSheet open={open} onClose={() => setOpen(false)} pillRef={pillRef} toggleRef={toggleRef} />
-    </LazyMotion>
+      {sheetReady && <MobileSheet open={open} onClose={() => setOpen(false)} pillRef={pillRef} toggleRef={toggleRef} />}
+    </>
   );
 }

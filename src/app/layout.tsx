@@ -5,6 +5,7 @@ import { display, sans } from "./fonts";
 import "./globals.css";
 import { site } from "@/content/site";
 import { Navbar } from "@/components/nav/Navbar";
+import { Logo } from "@/components/brand/Logo";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { HapticsProvider } from "@/components/motion/HapticsProvider";
 import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
@@ -61,7 +62,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </a>
         <HapticsProvider />
         <SmoothScroll />
-        <Navbar />
+        <Navbar logo={<Logo id="nav-logo" drawable className="w-21.5 lg:w-24.5" title="OtoXperts" />} />
         {children}
         <WhatsAppFloat />
         <Analytics />

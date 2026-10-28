@@ -1,13 +1,12 @@
 import { site, isTodo } from "@/content/site";
 import { telLink, mailLink, waLink } from "@/lib/whatsapp";
-import { Logo } from "@/components/brand/Logo";
 import { SocialLinks } from "@/components/ui/SocialLinks";
 
 const { footer, brand } = site;
 
 function LegalLink({ label, url }: { label: string; url: string | { todo: string } }) {
   if (isTodo(url)) {
-    return <span className="text-white/45" title="To be supplied by OtoXperts">{label}</span>;
+    return <span className="text-white/55" title="To be supplied by OtoXperts">{label}</span>;
   }
   return (
     <a href={url} className="hover:text-paper">
@@ -23,7 +22,9 @@ export function Footer() {
       <div className="container-x border-t border-white/12 pt-16 lg:pt-20">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-4">
-            <Logo id="footer-logo" className="w-48 text-paper" />
+            {/* A cached file rather than a second inline copy of the logo paths. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo/otoxperts-on-dark.svg" alt="OtoXperts" width={192} height={62} loading="lazy" decoding="async" />
             <p className="mt-5 text-paper">{brand.tagline}</p>
           </div>
 
@@ -76,7 +77,7 @@ export function Footer() {
 
         <div className="mt-16 flex flex-col gap-3 border-t border-white/12 pt-6 text-[0.8125rem] sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © 2026 {legal}. <span className="text-white/45">{brand.credit}.</span>
+            © 2026 {legal}. <span className="text-white/55">{brand.credit}.</span>
           </p>
           <p className="flex gap-5">
             <LegalLink label={footer.privacy} url={brand.privacyUrl} />

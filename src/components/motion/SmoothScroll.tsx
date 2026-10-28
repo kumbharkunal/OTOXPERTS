@@ -16,7 +16,7 @@ export function SmoothScroll() {
     let cancelled = false;
     let teardown: (() => void) | undefined;
 
-    (async () => {
+    const init = async () => {
       const [{ default: Lenis }, { gsap }, { ScrollTrigger }] = await Promise.all([
         import("lenis"),
         import("gsap"),
@@ -43,10 +43,15 @@ export function SmoothScroll() {
         lenis.destroy();
         setLenis(null);
       };
-    })();
+    };
+
+    // Smooth scrolling is a nicety: start it once the browser is idle after load.
+    const idle = window.requestIdleCallback ? window.requestIdleCallback(() => void init(), { timeout: 2000 }) : window.setTimeout(() => void init(), 800);
 
     return () => {
       cancelled = true;
+      if (window.cancelIdleCallback) window.cancelIdleCallback(idle);
+      else window.clearTimeout(idle);
       teardown?.();
     };
   }, []);

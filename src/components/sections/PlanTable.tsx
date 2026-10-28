@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { CheckIcon, MinusIcon } from "@phosphor-icons/react";
-import { LazyMotion, m } from "motion/react";
+import { CheckIcon } from "@phosphor-icons/react/dist/ssr/Check";
+import { MinusIcon } from "@phosphor-icons/react/dist/ssr/Minus";
 import { site } from "@/content/site";
 import { formatINR } from "@/lib/format";
 import { cn } from "@/lib/cn";
 
 const pdi = site.services.pdi;
-const loadFeatures = () => import("@/components/motion/features").then((r) => r.default);
 
 /**
  * Plan comparison. Desktop shows all three plans; phones show one at a time with a
@@ -18,8 +17,14 @@ export function PlanTable() {
   const [plan, setPlan] = useState(1);
 
   return (
-    <LazyMotion features={loadFeatures} strict>
+    <>
       <div role="group" aria-label="Choose a plan to compare" className="relative mb-6 hidden grid-cols-3 rounded-full bg-concrete p-1 max-lg:js:grid">
+        {/* One pill slides between the options (transform only). */}
+        <span
+          aria-hidden="true"
+          className="absolute inset-y-1 left-1 w-[calc((100%-0.5rem)/3)] rounded-full bg-carbon transition-transform duration-350 ease-ui motion-reduce:transition-none"
+          style={{ transform: `translateX(${plan * 100}%)` }}
+        />
         {pdi.plans.map((p, i) => (
           <button
             key={p.id}
@@ -32,15 +37,7 @@ export function PlanTable() {
               plan === i ? "text-paper" : "text-graphite",
             )}
           >
-            {plan === i && (
-              <m.span
-                layoutId="plan-pill"
-                aria-hidden="true"
-                className="absolute inset-0 rounded-full bg-carbon"
-                transition={{ type: "spring", duration: 0.35, bounce: 0.1 }}
-              />
-            )}
-            <span className="relative">{p.name}</span>
+            {p.name}
           </button>
         ))}
       </div>
@@ -53,12 +50,7 @@ export function PlanTable() {
               <span className="sr-only">{"What's included"}</span>
             </th>
             {pdi.plans.map((p, i) => (
-              <th
-                key={p.id}
-                scope="col"
-                className={cn("px-2 pb-5 align-bottom font-normal", i !== plan && "max-lg:js:hidden")}
-                data-plan-head
-              >
+              <th key={p.id} scope="col" className={cn("px-2 pb-5 align-bottom font-normal", i !== plan && "max-lg:js:hidden")}>
                 <span className="block text-[0.9375rem] font-[620] text-carbon">{p.name}</span>
                 <span className="display-3 mt-1 block text-carbon" data-price>
                   {formatINR(p.price)}
@@ -89,6 +81,6 @@ export function PlanTable() {
           ))}
         </tbody>
       </table>
-    </LazyMotion>
+    </>
   );
 }

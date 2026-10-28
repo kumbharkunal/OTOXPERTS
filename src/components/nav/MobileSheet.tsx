@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
-import { m, useReducedMotion, type Variants } from "motion/react";
-import { PhoneIcon, EnvelopeSimpleIcon } from "@phosphor-icons/react/ssr";
+import { LazyMotion, domAnimation, m, useReducedMotion, type Variants } from "motion/react";
+import { PhoneIcon } from "@phosphor-icons/react/dist/ssr/Phone";
+import { EnvelopeSimpleIcon } from "@phosphor-icons/react/dist/ssr/EnvelopeSimple";
 import { site } from "@/content/site";
 import { waLink, telLink, mailLink } from "@/lib/whatsapp";
 import { lockScroll, unlockScroll, scrollToId } from "@/lib/scroll";
@@ -102,6 +103,7 @@ export function MobileSheet({ open, onClose, pillRef, toggleRef }: Props) {
       };
 
   return (
+    <LazyMotion features={domAnimation} strict>
     <m.div
       id="mobile-menu"
       ref={sheetRef}
@@ -166,5 +168,6 @@ export function MobileSheet({ open, onClose, pillRef, toggleRef }: Props) {
         </div>
       </m.div>
     </m.div>
+    </LazyMotion>
   );
 }

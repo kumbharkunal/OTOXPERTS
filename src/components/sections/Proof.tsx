@@ -61,8 +61,7 @@ export function Proof() {
                         width={v.width}
                         height={v.height}
                         sizes="(min-width: 1024px) 15vw, (min-width: 640px) 30vw, 46vw"
-                        placeholder="blur"
-                        blurDataURL={v.blurDataURL}
+                        placeholder={v.blurDataURL as `data:image/${string}`}
                         quality={75}
                         className="aspect-[9/16] w-full object-cover transition-transform duration-500 ease-ui group-hover/reel:scale-[1.03]"
                       />

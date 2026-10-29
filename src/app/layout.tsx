@@ -46,10 +46,11 @@ export const viewport: Viewport = {
 
 /**
  * Runs before first paint: swaps no-js for js so enhancements never flash. torch-ready lets
- * the hero paint dark for its light (hero.css); if the light hasn't started within 8 s, the
- * class goes and the hero shows fully lit.
+ * the hero paint dark for its light (hero.css). If the light still hasn't started 5 s after
+ * the page has loaded (20 s at most), the class goes and the hero shows fully lit. Counting
+ * from load keeps a slow connection from lighting the frame just before the light arrives.
  */
-const jsClass = `(function(c){c.replace('no-js','js');c.add('torch-ready');setTimeout(function(){c.remove('torch-ready')},8000)})(document.documentElement.classList)`;
+const jsClass = `(function(c){c.replace('no-js','js');c.add('torch-ready');var off=function(){c.remove('torch-ready')},t=setTimeout(off,20000);addEventListener('load',function(){clearTimeout(t);setTimeout(off,5000)})})(document.documentElement.classList)`;
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

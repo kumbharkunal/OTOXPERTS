@@ -1,12 +1,18 @@
-import { getImageProps } from "next/image";
-import { getImage } from "@/content/images";
+import { preload } from "react-dom";
+import { getImage, type GeneratedImage } from "@/content/images";
 import { LOGO_PATHS } from "@/components/brand/logo-paths";
+
+const PORTRAIT = "(orientation: portrait)";
+const LANDSCAPE = "(orientation: landscape)";
+/** The cover box is wider than the screen whenever the screen's shape differs from the crop. */
+const SIZES = { portrait: "max(100vw, 56.25vh)", landscape: "max(100vw, 177.78vh)" };
 
 /**
  * The hero photograph, art-directed by orientation (16:9 landscape, 9:16 portrait, so a
- * portrait tablet keeps the whole car). The base layer is the LCP image; the lit layer
- * uses identical props, so the browser downloads it once.
- * Until the photos exist, a line drawing of the car stands in at the same ratios.
+ * portrait tablet keeps the whole car). It is the LCP image, so it uses static AVIF and
+ * WebP sizes from `npm run images` rather than the on-demand optimiser, and the matching
+ * crop is preloaded with the HTML. The lit layer repeats the same sources, so the browser
+ * downloads it once. Until the photos exist, a line drawing stands in at the same ratios.
  */
 export function HeroArt({ layer, alt }: { layer: "base" | "lit"; alt: string }) {
   const desktop = getImage("hero-bay");
@@ -15,25 +21,43 @@ export function HeroArt({ layer, alt }: { layer: "base" | "lit"; alt: string }) 
 
   if (!desktop) return <HeroPlaceholder label={isBase ? alt : undefined} />;
 
-  const common = { alt: isBase ? alt : "", sizes: "100vw", quality: 75 } as const;
-  const { props: img } = getImageProps({
-    ...common,
-    src: desktop.src,
-    width: desktop.width,
-    height: desktop.height,
-    loading: "eager",
-    ...(isBase ? { fetchPriority: "high" as const } : {}),
-  });
-  const mobileSet = mobile
-    ? getImageProps({ ...common, src: mobile.src, width: mobile.width, height: mobile.height }).props.srcSet
-    : undefined;
+  if (isBase) {
+    for (const [img, media, sizes] of [
+      [mobile, PORTRAIT, SIZES.portrait],
+      [desktop, LANDSCAPE, SIZES.landscape],
+    ] as const) {
+      if (img?.sources) {
+        preload(img.src, { as: "image", type: "image/avif", imageSrcSet: img.sources.avif, imageSizes: sizes, media, fetchPriority: "high" });
+      }
+    }
+  }
 
   return (
     <picture>
-      {mobileSet && <source media="(orientation: portrait)" srcSet={mobileSet} sizes="100vw" />}
-      {/* eslint-disable-next-line jsx-a11y/alt-text -- alt comes from getImageProps */}
-      <img {...img} aria-hidden={isBase ? undefined : true} decoding={isBase ? "sync" : "async"} />
+      {mobile && <Sources img={mobile} media={PORTRAIT} sizes={SIZES.portrait} />}
+      <Sources img={desktop} media={LANDSCAPE} sizes={SIZES.landscape} />
+      <img
+        src={desktop.src}
+        width={desktop.width}
+        height={desktop.height}
+        alt={isBase ? alt : ""}
+        aria-hidden={isBase ? undefined : true}
+        loading="eager"
+        fetchPriority={isBase ? "high" : undefined}
+        decoding={isBase ? undefined : "async"}
+      />
     </picture>
+  );
+}
+
+/** AVIF, then WebP, then the JPG master, for one orientation. */
+function Sources({ img, media, sizes }: { img: GeneratedImage; media: string; sizes: string }) {
+  return (
+    <>
+      {img.sources && <source media={media} type="image/avif" srcSet={img.sources.avif} sizes={sizes} />}
+      {img.sources && <source media={media} type="image/webp" srcSet={img.sources.webp} sizes={sizes} />}
+      <source media={media} srcSet={img.src} />
+    </>
   );
 }
 

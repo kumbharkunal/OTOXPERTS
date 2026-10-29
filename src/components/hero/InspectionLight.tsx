@@ -12,7 +12,7 @@ type Anchor = { el: HTMLElement; id: string; x: number; y: number };
 /**
  * The inspection light (docs/PLAN.md §7). With JS and motion, CSS already paints the
  * stage torch-ready (dark bay, one readout slot); this controller switches on the light.
- * If it never runs, the frame lights itself after 8 s (html.torch-ready, see layout).
+ * If it never runs, the frame lights itself 5 s after load (html.torch-ready, see layout).
  * Under reduced motion it does nothing and the server-rendered frame stays fully lit.
  *
  * Per frame the work is two transforms (beam + counter-moved inner) and a few

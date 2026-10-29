@@ -29,8 +29,9 @@ export function Shot({ name, alt, sizes, className, imgClassName, tone = "light"
           width={img.width}
           height={img.height}
           sizes={sizes}
-          placeholder="blur"
-          blurDataURL={img.blurDataURL}
+          // The tiny WebP itself, stretched: next/image's "blur" wraps it in an SVG blur
+          // filter, which costs far more to paint for a placeholder few people ever see.
+          placeholder={img.blurDataURL as `data:image/${string}`}
           quality={75}
           className={cn("absolute inset-0 size-full object-cover", imgClassName)}
         />

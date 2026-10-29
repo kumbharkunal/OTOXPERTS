@@ -17,7 +17,14 @@ export const IMAGE_SPECS = {
 
 export type ImageKey = keyof typeof IMAGE_SPECS;
 
-export type GeneratedImage = { src: string; width: number; height: number; blurDataURL: string };
+export type GeneratedImage = {
+  src: string;
+  width: number;
+  height: number;
+  blurDataURL: string;
+  /** Static srcset strings, written for the hero pair only (the LCP image). */
+  sources?: { avif: string; webp: string };
+};
 
 const files = generated as Partial<Record<ImageKey, GeneratedImage>>;
 

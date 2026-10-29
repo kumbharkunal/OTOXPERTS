@@ -11,10 +11,11 @@ import { readdir, readFile, writeFile, mkdir } from "node:fs/promises";
 import { join, extname } from "node:path";
 import sharp from "sharp";
 
-// Mirrors IMAGE_SPECS in src/content/images.ts.
+// Mirrors IMAGE_SPECS in src/content/images.ts. The hero pair is the LCP image, so it also
+// gets static AVIF and WebP sizes: the page never waits for the image optimiser to warm up.
 const SPECS = {
-  1: { key: "hero-bay", ratio: [16, 9], width: 2560, height: 1440, position: "centre" },
-  2: { key: "hero-bay-mobile", ratio: [9, 16], width: 1080, height: 1920, position: "centre" },
+  1: { key: "hero-bay", ratio: [16, 9], width: 2560, height: 1440, position: "centre", sizes: [828, 1080, 1280, 1664, 2048] },
+  2: { key: "hero-bay-mobile", ratio: [9, 16], width: 1080, height: 1920, position: "centre", sizes: [480, 640, 750, 936, 1080] },
   3: { key: "stockyard", ratio: [4, 5], width: 1600, height: 2000, position: "attention" },
   4: { key: "engineer-walkround", ratio: [3, 2], width: 2400, height: 1600, position: "attention" },
   5: { key: "detail-paint-gauge", ratio: [1, 1], width: 1200, height: 1200, position: "attention" },
@@ -80,11 +81,28 @@ for (const file of files.sort()) {
     .webp({ quality: 40 })
     .toBuffer();
 
+  // Static responsive sizes (never larger than the master), as ready-made srcset strings.
+  let sources;
+  if (spec.sizes) {
+    const widths = [...new Set([...spec.sizes.filter((w) => w < width), width])];
+    const sets = { avif: [], webp: [] };
+    for (const w of widths) {
+      const h = Math.round((w * height) / width);
+      const frame = sharp(input).rotate().resize(w, h, { fit: "cover", position: spec.position });
+      await frame.clone().avif({ quality: 55, effort: 6 }).toFile(join(OUT, `${spec.key}-${w}.avif`));
+      await frame.clone().webp({ quality: 74 }).toFile(join(OUT, `${spec.key}-${w}.webp`));
+      sets.avif.push(`/images/${spec.key}-${w}.avif ${w}w`);
+      sets.webp.push(`/images/${spec.key}-${w}.webp ${w}w`);
+    }
+    sources = { avif: sets.avif.join(", "), webp: sets.webp.join(", ") };
+  }
+
   manifest[spec.key] = {
     src: `/images/${spec.key}.jpg`,
     width,
     height,
     blurDataURL: `data:image/webp;base64,${blur.toString("base64")}`,
+    ...(sources ? { sources } : {}),
   };
   done++;
   console.log(`ok    ${file} -> ${out} (${width}x${height})`);

@@ -33,13 +33,21 @@
     "src": "/images/hero-bay-mobile.jpg",
     "width": 936,
     "height": 1664,
-    "blurDataURL": "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAADQAwCdASoQABwAPu1iqU2ppaQiMAgBMB2JaQABHu+Hyn8L5+ZI/AAA/v4VWrV9HiiNznHuIwleniV14U/5XrORxX9fpBNnRs/d/OmIU4mlceiKuIgeyzn7ZkwkJq6JXfXZC2DevF8+AAAA"
+    "blurDataURL": "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAADQAwCdASoQABwAPu1iqU2ppaQiMAgBMB2JaQABHu+Hyn8L5+ZI/AAA/v4VWrV9HiiNznHuIwleniV14U/5XrORxX9fpBNnRs/d/OmIU4mlceiKuIgeyzn7ZkwkJq6JXfXZC2DevF8+AAAA",
+    "sources": {
+      "avif": "/images/hero-bay-mobile-480.avif 480w, /images/hero-bay-mobile-640.avif 640w, /images/hero-bay-mobile-750.avif 750w, /images/hero-bay-mobile-936.avif 936w",
+      "webp": "/images/hero-bay-mobile-480.webp 480w, /images/hero-bay-mobile-640.webp 640w, /images/hero-bay-mobile-750.webp 750w, /images/hero-bay-mobile-936.webp 936w"
+    }
   },
   "hero-bay": {
     "src": "/images/hero-bay.jpg",
     "width": 1664,
     "height": 936,
-    "blurDataURL": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAACwAQCdASoQAAkAA4BaJaQAApt3f4zgAP74VmyBjTvlS/4j+VLO2tZwPYQsYYjqqGda7Aa7ZYS2LXWv0nNQEBUHE0gAAA=="
+    "blurDataURL": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAACwAQCdASoQAAkAA4BaJaQAApt3f4zgAP74VmyBjTvlS/4j+VLO2tZwPYQsYYjqqGda7Aa7ZYS2LXWv0nNQEBUHE0gAAA==",
+    "sources": {
+      "avif": "/images/hero-bay-828.avif 828w, /images/hero-bay-1080.avif 1080w, /images/hero-bay-1280.avif 1280w, /images/hero-bay-1664.avif 1664w",
+      "webp": "/images/hero-bay-828.webp 828w, /images/hero-bay-1080.webp 1080w, /images/hero-bay-1280.webp 1280w, /images/hero-bay-1664.webp 1664w"
+    }
   },
   "stockyard": {
     "src": "/images/stockyard.jpg",

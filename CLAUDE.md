@@ -30,7 +30,7 @@ The approved plan is `docs/PLAN.md` (research, sources, tokens, section specs, T
 - TypeScript stays on 5.9.x and ESLint on 9.x (TS 7 and ESLint 10 break eslint-config-next).
 
 ## Commands
-`npm run dev` · `build` · `start` · `lint` · `typecheck` · `images` · `todos` · `budget` · `test:e2e`
+`npm run dev` · `build` · `start` · `lint` · `typecheck` · `images` · `videos` · `todos` · `budget` · `test:e2e`
 
 ## Git
 Conventional commits, small and logical. Never force-push. Push as the `kumbharkunal` GitHub account.

@@ -69,16 +69,17 @@ for (const file of files.sort()) {
   const { hasAudio } = await probe(ffmpeg, input);
 
   // Longer side at most 960px, even dimensions, 30 fps at most; fast start so playback
-  // begins before the download ends.
+  // begins before the download ends. Capped near 1.3 Mbps: phone footage of people and
+  // cars looks the same on a phone, and a minute costs about 10 MB of mobile data.
   const scale = `scale='if(gt(iw,ih),min(${LONG_SIDE},iw),-2)':'if(gt(iw,ih),-2,min(${LONG_SIDE},ih))':flags=lanczos`;
   await run(
     ffmpeg,
     [
       "-hide_banner", "-loglevel", "error", "-y", "-i", input,
       "-vf", scale, "-fpsmax", "30",
-      "-c:v", "libx264", "-preset", "slow", "-crf", "26", "-profile:v", "high", "-pix_fmt", "yuv420p",
-      "-maxrate", "1800k", "-bufsize", "3600k",
-      ...(hasAudio ? ["-c:a", "aac", "-b:a", "96k", "-ac", "2"] : ["-an"]),
+      "-c:v", "libx264", "-preset", "slow", "-crf", "28", "-profile:v", "high", "-pix_fmt", "yuv420p",
+      "-maxrate", "1200k", "-bufsize", "2400k",
+      ...(hasAudio ? ["-c:a", "aac", "-b:a", "80k", "-ac", "2"] : ["-an"]),
       "-movflags", "+faststart", out,
     ],
     { maxBuffer: 16 * 1024 * 1024 },
